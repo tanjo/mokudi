@@ -2,7 +2,7 @@
 
 /**
  * mokudi
- * ver. 1.0.1
+ * ver. 1.0.2
  */
 
 const fs = require('fs');
@@ -55,7 +55,7 @@ const main = (argv) => {
   });
 };
 
-const manageFiles = (files, wd, prefix) => {
+const manageFiles = (files, wd, basedir, prefix) => {
   let result = '';
   if (!prefix) {
     prefix = '';
@@ -68,12 +68,12 @@ const manageFiles = (files, wd, prefix) => {
         !/package\.json/.test(file) &&
         !/README\.md/.test(file);
   }).forEach((file) => {
-    result += prefix + '- [' + file.replace('.md', '') + '](' + wd + '/' + file + ')' + '\n';
+    result += prefix + '- [' + file.replace('.md', '') + '](' + path.relative(basedir, wd + '/' + file) + ')' + '\n';
   });
   return result;
 };
 
-const manageDirs = (dirs, wd, prefix) => {
+const manageDirs = (dirs, wd, basedir, prefix) => {
   let result = '';
   if (!prefix) {
     prefix = '';
@@ -88,19 +88,22 @@ const manageDirs = (dirs, wd, prefix) => {
   }).forEach((dir) => {
     const value = explorer(wd + '/' + dir, '  ' + prefix);
     if (value && value.length > 0) {
-      result += prefix + '- ' + dir + '\n' + explorer(wd + '/' + dir, '  ' + prefix);
+      result += prefix + '- ' + dir + '\n' + explorer(wd + '/' + dir, basedir, '  ' + prefix);
     }
   });
   return result;
 };
 
-const explorer = (wd, prefix) => {
+const explorer = (wd, basedir, prefix) => {
+  if (!basedir || basedir.length === 0) {
+    basedir = wd;
+  }
   const files = fs.readdirSync(wd);
   if (files.length === 0) {
     return "";
   }
-  let result = manageFiles(files, wd, prefix);
-  result += manageDirs(files, wd, prefix);
+  let result = manageFiles(files, wd, basedir, prefix);
+  result += manageDirs(files, wd, basedir, prefix);
   return result;
 };
 

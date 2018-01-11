@@ -6,7 +6,7 @@ README内の要素を目次にするのではなく複数に分かれたMarkdown
 
 ## 目次
 
-- [CHANGELOG](/Users/tanjo/project/tanjo/mokudi/CHANGELOG.md)
+- [CHANGELOG](CHANGELOG.md)
 
 ## 開発環境
 
@@ -16,7 +16,7 @@ README内の要素を目次にするのではなく複数に分かれたMarkdown
 ## 利用方法
 
 ```
-npm install -g tanjo/mokudi#1.0.1
+npm install -g tanjo/mokudi#1.0.2
 ```
 
 
