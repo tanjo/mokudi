@@ -7,8 +7,6 @@ README内の要素を目次にするのではなく複数に分かれたMarkdown
 ## 目次
 
 - [CHANGELOG](/Users/tanjo/project/tanjo/mokudi/CHANGELOG.md)
-- sub
-  - [SUB](/Users/tanjo/project/tanjo/mokudi/sub/SUB.md)
 
 ## 開発環境
 
