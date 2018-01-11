@@ -1,0 +1,13 @@
+{
+  "name": "mokudi",
+  "version": "1.0.0",
+  "description": "Markdownから目次を自動生成する",
+  "author": "tanjo",
+  "license": "MIT",
+  "bin": {
+    "mokudi": "index.js"
+  },
+  "engines": {
+    "node": ">=8.5.0"
+  }
+}
