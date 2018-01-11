@@ -1,3 +1,0 @@
-# SUB
-
-Sample Markdown File.
