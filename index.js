@@ -2,7 +2,7 @@
 
 /**
  * mokudi
- * ver. 1.0.0
+ * ver. 1.0.1
  */
 
 const fs = require('fs');
@@ -86,17 +86,20 @@ const manageDirs = (dirs, wd, prefix) => {
         !/image/.test(dir) &&
         !/pdf/.test(dir);
   }).forEach((dir) => {
-    result += prefix + '- ' + dir + '\n' + explorer(wd + '/' + dir, '  ' + prefix);
+    const value = explorer(wd + '/' + dir, '  ' + prefix);
+    if (value && value.length > 0) {
+      result += prefix + '- ' + dir + '\n' + explorer(wd + '/' + dir, '  ' + prefix);
+    }
   });
   return result;
 };
 
 const explorer = (wd, prefix) => {
   const files = fs.readdirSync(wd);
-  let result = manageFiles(files, wd, prefix);
-  if (!result || result.length == 0) {
+  if (files.length === 0) {
     return "";
   }
+  let result = manageFiles(files, wd, prefix);
   result += manageDirs(files, wd, prefix);
   return result;
 };
