@@ -16,7 +16,7 @@ README内の要素を目次にするのではなく複数に分かれたMarkdown
 ## 利用方法
 
 ```
-npm install -g tanjo/mokudi#1.0.2
+npm install -g tanjo/mokudi
 ```
 
 

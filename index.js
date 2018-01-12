@@ -2,7 +2,7 @@
 
 /**
  * mokudi
- * ver. 1.0.2
+ * ver. 1.0.3
  */
 
 const fs = require('fs');
@@ -10,7 +10,8 @@ const path = require('path');
 
 const main = (argv) => {
   const argc = argv.length;
-  if (argv.length !== 3) {
+
+  if (argc !== 3) {
     console.error("Error: wrong arguments.");
     return;
   }
@@ -33,7 +34,7 @@ const main = (argv) => {
     filePath = readmePath;
   } else {
     const baseName = path.basename(userPath);
-    const baseDir = path.dirname(userPath);
+    const baseDirectory = path.dirname(userPath);
     filePath = userPath;
   }
 
@@ -47,7 +48,7 @@ const main = (argv) => {
       throw error;
     }
     const readme = data.replace(/# 目次\n([\s\S]*?)(?=#)|# 目次\n([\s\S]*)/, "# 目次\n\n" + explorer(path.dirname(filePath)) + "\n");
-    fs.writeFile(filePath, readme, function(error) {
+    fs.writeFile(filePath, readme, (error) => {
       if (error) {
         throw error;
       }
@@ -55,55 +56,55 @@ const main = (argv) => {
   });
 };
 
-const manageFiles = (files, wd, basedir, prefix) => {
+const manageFiles = (files, workingDirectory, baseDirectory, prefix) => {
   let result = '';
   if (!prefix) {
     prefix = '';
   }
   files.filter((file) => {
-    return fs.statSync(wd + '/' + file).isFile() &&
+    return fs.statSync(workingDirectory + '/' + file).isFile() &&
         !/^\./.test(file) &&
         /(\.*)\.md/.test(file) &&
         !/package-lock.json/.test(file) &&
         !/package\.json/.test(file) &&
         !/README\.md/.test(file);
   }).forEach((file) => {
-    result += prefix + '- [' + file.replace('.md', '') + '](' + path.relative(basedir, wd + '/' + file) + ')' + '\n';
+    result += prefix + '- [' + file.replace('.md', '') + '](' + path.relative(baseDirectory, workingDirectory + '/' + file) + ')' + '\n';
   });
   return result;
 };
 
-const manageDirs = (dirs, wd, basedir, prefix) => {
+const manageDirs = (dirs, workingDirectory, baseDirectory, prefix) => {
   let result = '';
   if (!prefix) {
     prefix = '';
   }
   dirs.filter((dir) => {
-    return fs.statSync(wd + '/' + dir).isDirectory() &&
+    return fs.statSync(workingDirectory + '/' + dir).isDirectory() &&
         !/^\./.test(dir) &&
         !/^_/.test(dir) &&
         !/node_modules/.test(dir) &&
         !/image/.test(dir) &&
         !/pdf/.test(dir);
   }).forEach((dir) => {
-    const value = explorer(wd + '/' + dir, '  ' + prefix);
+    const value = explorer(workingDirectory + '/' + dir, '  ' + prefix);
     if (value && value.length > 0) {
-      result += prefix + '- ' + dir + '\n' + explorer(wd + '/' + dir, basedir, '  ' + prefix);
+      result += prefix + '- ' + dir + '\n' + explorer(workingDirectory + '/' + dir, baseDirectory, '  ' + prefix);
     }
   });
   return result;
 };
 
-const explorer = (wd, basedir, prefix) => {
-  if (!basedir || basedir.length === 0) {
-    basedir = wd;
+const explorer = (workingDirectory, baseDirectory, prefix) => {
+  if (!baseDirectory || baseDirectory.length === 0) {
+    baseDirectory = workingDirectory;
   }
-  const files = fs.readdirSync(wd);
+  const files = fs.readdirSync(workingDirectory);
   if (files.length === 0) {
     return "";
   }
-  let result = manageFiles(files, wd, basedir, prefix);
-  result += manageDirs(files, wd, basedir, prefix);
+  let result = manageFiles(files, workingDirectory, baseDirectory, prefix);
+  result += manageDirs(files, workingDirectory, baseDirectory, prefix);
   return result;
 };
 
