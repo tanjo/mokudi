@@ -2,7 +2,7 @@
 
 /**
  * mokudi
- * ver. 1.0.3
+ * ver. 1.0.4
  */
 
 const fs = require('fs');
@@ -11,7 +11,7 @@ const path = require('path');
 const main = (argv) => {
   const argc = argv.length;
 
-  if (argc !== 3) {
+  if (argc < 3) {
     console.error("Error: wrong arguments.");
     return;
   }
@@ -47,7 +47,7 @@ const main = (argv) => {
     if (error) {
       throw error;
     }
-    const readme = data.replace(/# 目次\n([\s\S]*?)(?=#)|# 目次\n([\s\S]*)/, "# 目次\n\n" + explorer(path.dirname(filePath)) + "\n");
+    const readme = data.replace(/# 目次\n([\s\S]*?)(?=\n#)|# 目次\n([\s\S]*)/, "# 目次\n\n" + explorer(path.dirname(filePath)) + "\n");
     fs.writeFile(filePath, readme, (error) => {
       if (error) {
         throw error;
