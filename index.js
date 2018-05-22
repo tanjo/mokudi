@@ -43,17 +43,25 @@ const main = (argv) => {
     return;
   }
 
-  const readme = fs.readFile(filePath, 'utf8', (error, data) => {
-    if (error) {
-      throw error;
-    }
-    const readme = data.replace(/# 目次\n([\s\S]*?)(?=\n#)|# 目次\n([\s\S]*)/, "# 目次\n\n" + explorer(path.dirname(filePath)) + "\n");
-    fs.writeFile(filePath, readme, (error) => {
+  try {
+    const readme = fs.readFile(filePath, 'utf8', (error, data) => {
       if (error) {
         throw error;
       }
+      const readme = data.replace(/# 目次\n([\s\S]*?)(?=\n#)|# 目次\n([\s\S]*)/, "# 目次\n\n" + explorer(path.dirname(filePath)) + "\n");
+      try {
+        fs.writeFile(filePath, readme, (error) => {
+          if (error) {
+            throw error;
+          }
+        });
+      } catch (e) {
+        console.error(e);
+      }
     });
-  });
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 const manageFiles = (files, workingDirectory, baseDirectory, prefix) => {
@@ -108,4 +116,8 @@ const explorer = (workingDirectory, baseDirectory, prefix) => {
   return result;
 };
 
-main(process.argv);
+try {
+  main(process.argv);
+} catch (e) {
+  console.error(e);
+}

@@ -8,6 +8,7 @@ README内の要素を目次にするのではなく複数に分かれたMarkdown
 
 - [CHANGELOG](CHANGELOG.md)
 
+
 ## 開発環境
 
 - Mac
@@ -18,7 +19,6 @@ README内の要素を目次にするのではなく複数に分かれたMarkdown
 ```
 npm install -g tanjo/mokudi
 ```
-
 
 ```
 mokudi ./README.md
