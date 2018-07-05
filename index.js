@@ -2,7 +2,7 @@
 
 /**
  * mokudi
- * ver. 1.0.4
+ * ver. 1.0.6
  */
 
 const fs = require('fs');
@@ -17,6 +17,10 @@ const main = (argv) => {
   }
 
   const userPath = path.resolve(argv[2]);
+
+  const content_target = argv[3] || "# 目次";
+
+  console.log(content_target);
 
   if (!fs.existsSync(userPath)) {
     console.error("Error: wrong path.   \n" + userPath);
@@ -48,7 +52,7 @@ const main = (argv) => {
       if (error) {
         throw error;
       }
-      const readme = data.replace(/# 目次\n([\s\S]*?)(?=\n#)|# 目次\n([\s\S]*)/, "# 目次\n\n" + explorer(path.dirname(filePath)) + "\n");
+      const readme = data.replace(new RegExp(content_target + "\\n([\\s\\S]*?)(?=\\n#)|" + content_target + "\\n([\\s\\S]*)"), content_target + "\n\n" + explorer(path.dirname(filePath)));
       try {
         fs.writeFile(filePath, readme, (error) => {
           if (error) {
@@ -77,7 +81,7 @@ const manageFiles = (files, workingDirectory, baseDirectory, prefix) => {
         !/package\.json/.test(file) &&
         !/README\.md/.test(file);
   }).forEach((file) => {
-    result += prefix + '- [' + file.replace('.md', '') + '](' + path.relative(baseDirectory, workingDirectory + '/' + file) + ')' + '\n';
+    result += prefix + '- [' + file.replace('.md', '') + '](' + path.relative(baseDirectory, workingDirectory + '/' + file.replace('(', '%28').replace(')', '%29')) + ')' + '\n';
   });
   return result;
 };

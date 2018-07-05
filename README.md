@@ -7,7 +7,7 @@ README内の要素を目次にするのではなく複数に分かれたMarkdown
 ## 目次
 
 - [CHANGELOG](CHANGELOG.md)
-
+- [サンプル(ですお)](サンプル%28ですお%29.md)
 
 ## 開発環境
 
@@ -21,5 +21,10 @@ npm install -g tanjo/mokudi
 ```
 
 ```
-mokudi ./README.md
+mokudi ./README.md "# Contents"
 ```
+
+## Contents
+
+- [CHANGELOG](CHANGELOG.md)
+- [サンプル(ですお)](サンプル%28ですお%29.md)
