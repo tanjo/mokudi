@@ -2,7 +2,7 @@
 
 /**
  * mokudi
- * ver. 1.0.6
+ * ver. 1.0.7
  */
 
 const fs = require('fs');
@@ -81,7 +81,7 @@ const manageFiles = (files, workingDirectory, baseDirectory, prefix) => {
         !/package\.json/.test(file) &&
         !/README\.md/.test(file);
   }).forEach((file) => {
-    result += prefix + '- [' + file.replace('.md', '') + '](' + path.relative(baseDirectory, workingDirectory + '/' + file.replace('(', '%28').replace(')', '%29')) + ')' + '\n';
+    result += prefix + '- [' + file.replace('.md', '') + '](' + path.relative(baseDirectory, workingDirectory + '/' + file.replace(' ', '%20').replace('(', '%28').replace(')', '%29')) + ')' + '\n';
   });
   return result;
 };

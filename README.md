@@ -22,7 +22,3 @@ npm install -g tanjo/mokudi
 ```
 mokudi ./README.md "# Contents"
 ```
-
-## Contents
-
-- [CHANGELOG](CHANGELOG.md)
