@@ -2,7 +2,7 @@
 
 /**
  * mokudi
- * ver. 1.0.9
+ * ver. 1.1.0
  */
 
 const fs = require('fs');
@@ -28,6 +28,7 @@ const main = (argv) => {
   }
 
   let filePath = null;
+  let mokudignorePath = null;
 
   if (fs.statSync(userPath).isDirectory()) {
     const readmePath = userPath + "/README.md";
@@ -35,10 +36,12 @@ const main = (argv) => {
       console.error("Error: Not found README.md.   \n" + readmePath);
       return;
     }
+    mokudignorePath = userPath + "/.mokudignore";
     filePath = readmePath;
   } else {
     const baseName = path.basename(userPath);
     const baseDirectory = path.dirname(userPath);
+    mokudignorePath = baseDirectory + "/.mokudignore";
     filePath = userPath;
   }
 
@@ -47,12 +50,18 @@ const main = (argv) => {
     return;
   }
 
+  var ignores = [];
+  if (fs.existsSync(mokudignorePath)) {
+      var ignoreData = fs.readFileSync(mokudignorePath, 'utf8');
+      ignores = ignoreData.split('\n');
+  }
+
   try {
     const readme = fs.readFile(filePath, 'utf8', (error, data) => {
       if (error) {
         throw error;
       }
-      const readme = data.replace(new RegExp(content_target + "\\n([\\s\\S]*?)(?=\\n#)|" + content_target + "\\n([\\s\\S]*)"), content_target + "\n\n" + explorer(path.dirname(filePath)));
+      const readme = data.replace(new RegExp(content_target + "\\n([\\s\\S]*?)(?=\\n#)|" + content_target + "\\n([\\s\\S]*)"), content_target + "\n\n" + explorer(path.dirname(filePath), ignores));
       try {
         fs.writeFile(filePath, readme, (error) => {
           if (error) {
@@ -68,10 +77,13 @@ const main = (argv) => {
   }
 };
 
-const manageFiles = (files, workingDirectory, baseDirectory, prefix) => {
+const manageFiles = (files, workingDirectory, ignores, baseDirectory, prefix) => {
   let result = '';
   if (!prefix) {
     prefix = '';
+  }
+  if (!ignores) {
+    ignores = [];
   }
   files.filter((file) => {
     return fs.statSync(workingDirectory + '/' + file).isFile() &&
@@ -79,17 +91,21 @@ const manageFiles = (files, workingDirectory, baseDirectory, prefix) => {
         /(\.*)\.md/.test(file) &&
         !/package-lock.json/.test(file) &&
         !/package\.json/.test(file) &&
-        !/README\.md/.test(file);
+        !/README\.md/.test(file) &&
+        !ignores.includes(file);
   }).forEach((file) => {
     result += prefix + '- [' + file.replace('.md', '') + '](' + (path.relative(baseDirectory, workingDirectory.replace(/ /ig, '%20').replace(/\(/ig, '%28').replace(/\)/ig, '%29') + '/' + file.replace(/ /ig, '%20').replace(/\(/ig, '%28').replace(/\)/ig, '%29'))).normalize('NFC') + ')' + '\n';
   });
   return result;
 };
 
-const manageDirs = (dirs, workingDirectory, baseDirectory, prefix) => {
+const manageDirs = (dirs, workingDirectory, ignores, baseDirectory, prefix) => {
   let result = '';
   if (!prefix) {
     prefix = '';
+  }
+  if (!ignores) {
+    ignores = [];
   }
   dirs.filter((dir) => {
     return fs.statSync(workingDirectory + '/' + dir).isDirectory() &&
@@ -97,17 +113,18 @@ const manageDirs = (dirs, workingDirectory, baseDirectory, prefix) => {
         !/^_/.test(dir) &&
         !/node_modules/.test(dir) &&
         !/image/.test(dir) &&
-        !/pdf/.test(dir);
+        !/pdf/.test(dir) &&
+        !ignores.includes(dir);
   }).forEach((dir) => {
     const value = explorer(workingDirectory + '/' + dir, '  ' + prefix);
     if (value && value.length > 0) {
-      result += prefix + '- ' + dir + '\n' + explorer(workingDirectory + '/' + dir, baseDirectory, '  ' + prefix);
+      result += prefix + '- ' + dir + '\n' + explorer(workingDirectory + '/' + dir, ignores, baseDirectory, '  ' + prefix);
     }
   });
   return result;
 };
 
-const explorer = (workingDirectory, baseDirectory, prefix) => {
+const explorer = (workingDirectory, ignores, baseDirectory, prefix) => {
   if (!baseDirectory || baseDirectory.length === 0) {
     baseDirectory = workingDirectory;
   }
@@ -115,8 +132,8 @@ const explorer = (workingDirectory, baseDirectory, prefix) => {
   if (files.length === 0) {
     return "";
   }
-  let result = manageFiles(files, workingDirectory, baseDirectory, prefix);
-  result += manageDirs(files, workingDirectory, baseDirectory, prefix);
+  let result = manageFiles(files, workingDirectory, ignores, baseDirectory, prefix);
+  result += manageDirs(files, workingDirectory, ignores, baseDirectory, prefix);
   return result;
 };
 
