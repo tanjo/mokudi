@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Ver. 1.1.1 (2022/10/26)
+
+- `package-lock.json` の更新
+
 ## Ver. 1.1.0 (2020/07/03)
 
 - `.mokudignore` を導入
