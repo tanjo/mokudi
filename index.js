@@ -2,7 +2,7 @@
 
 /**
  * mokudi
- * ver. 1.1.0
+ * ver. 1.1.1
  */
 
 const fs = require('fs');
