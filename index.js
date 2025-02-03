@@ -2,7 +2,7 @@
 
 /**
  * mokudi
- * ver. 1.1.1
+ * ver. 2025.2.3-0.0.1
  */
 
 const fs = require('fs');
@@ -13,6 +13,11 @@ const main = (argv) => {
 
   if (argv.filter((arg) => ['--help', '-h'].includes(arg)).length > 0) {
     console.log("Usage: mokudi <path> [content_target]");
+    return;
+  }
+
+  if (argv.filter((arg) => ['--version', '-v'].includes(arg)).length > 0) {
+    console.log(require('./package.json').version);
     return;
   }
 
