@@ -143,8 +143,10 @@ const explorer = (workingDirectory, ignores, baseDirectory, prefix) => {
   return result;
 };
 
-try {
-  main(process.argv);
-} catch (e) {
-  console.error(e);
+if (require.main === module) {
+  try {
+    main(process.argv);
+  } catch (e) {
+    console.error(e);
+  }
 }
