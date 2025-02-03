@@ -11,8 +11,14 @@ const path = require('path');
 const main = (argv) => {
   const argc = argv.length;
 
+  if (argv.filter((arg) => ['--help', '-h'].includes(arg)).length > 0) {
+    console.log("Usage: mokudi <path> [content_target]");
+    return;
+  }
+
   if (argc < 3) {
-    console.error("Error: wrong arguments.");
+    console.error("Error: Not found path.");
+    console.error("Usage: mokudi <path> [content_target]");
     return;
   }
 
@@ -23,7 +29,7 @@ const main = (argv) => {
   console.log(content_target);
 
   if (!fs.existsSync(userPath)) {
-    console.error("Error: wrong path.   \n" + userPath);
+    console.error("Error: Not found path.   \n" + userPath);
     return;
   }
 
