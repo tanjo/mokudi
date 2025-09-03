@@ -22,3 +22,10 @@ npm install -g tanjo/mokudi
 ```
 mokudi ./README.md "# Contents"
 ```
+
+### Dev
+
+```
+npm install
+npm link
+```

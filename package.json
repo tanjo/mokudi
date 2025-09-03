@@ -1,6 +1,6 @@
 {
   "name": "mokudi",
-  "version": "2025.2.3-0.0.1",
+  "version": "2025.9.3",
   "description": "Markdownから目次を自動生成する",
   "author": "tanjo",
   "license": "MIT",
